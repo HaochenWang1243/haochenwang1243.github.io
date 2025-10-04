@@ -8,9 +8,7 @@ I came up with the mathematical derivations in this article, and AI suggested ph
 
 Our journey begins with the generalization of the dot product to complex vectors. In $\mathbb{C}^m$, the inner product for vectors $\vec{u}$ and $\vec{v}$ is defined as:
 
-$$
-\langle \vec{u}, \vec{v} \rangle = \sum_{n} \vec{u}[n] \overline{\vec{v}[n]}
-$$
+$$\langle \vec{u}, \vec{v} \rangle = \sum_{n} \vec{u}[n] \overline{\vec{v}[n]}$$
 
 This operation has two key properties:
 * **Linearity in the first argument:** $\langle a\vec{u}_1 + b\vec{u}_2, \vec{v} \rangle = a\langle \vec{u}_1, \vec{v} \rangle + b\langle \vec{u}_2, \vec{v} \rangle$
