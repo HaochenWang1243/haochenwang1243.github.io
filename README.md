@@ -1,6 +1,4 @@
-# Hao-chen Wang
-
-Welcome! I'm Hao-chen Wang, a machine learning and signal processing enthusiast. Here, I write about topics in **digital signal processing**, **temporal point processes**, and **ML applications in communications**.
+Welcome! I'm Haochen Wang, a machine learning and signal processing learner. Here, I write about my own thoughts on **digital signal processing**, **time series analysis**, and **ML applications in communications**.
 
 ## Featured Articles
 
