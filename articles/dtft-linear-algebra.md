@@ -1,7 +1,3 @@
----
-layout: post
----
-
 ## **Understanding the DTFT: A Linear Algebra Perspective**
 
 The Discrete-Time Fourier Transform (DTFT) is more than just a formula; it's a profound geometric statement. It reveals that any discrete signal can be represented as a sum of infinitely many, continuously-indexed oscillating components. This article will trace this elegant concept, starting from the dot product and culminating in the DTFT. 
