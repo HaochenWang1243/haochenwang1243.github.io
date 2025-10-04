@@ -2,4 +2,4 @@ Welcome! I'm Haochen Wang, a machine learning and signal processing learner. Her
 
 ## Featured Articles
 
-- [Understanding the DTFT: A Linear Algebra Perspective](articles/dtft-linear-algebra.md) – a detailed exploration of the Discrete-Time Fourier Transform through the lens of linear algebra.
+- [Understanding the DTFT: A Linear Algebra Perspective](articles/dtft-linear-algebra.html) – a detailed exploration of the Discrete-Time Fourier Transform through the lens of linear algebra.
