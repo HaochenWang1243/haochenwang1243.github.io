@@ -1,0 +1,5 @@
+# _config.yml
+theme: minima  # optional, for a simple built-in theme
+
+title: "Understanding the DTFT: A Linear Algebra Perspective"
+layout: default
