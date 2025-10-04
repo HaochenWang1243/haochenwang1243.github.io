@@ -1,6 +1,6 @@
 ---
-title: "Understanding the DTFT: A Linear Algebra Perspective"
-layout: default
+layout: post
+title: Blogging Like a Hacker
 ---
 
 ## **Understanding the DTFT: A Linear Algebra Perspective**
