@@ -1,3 +1,7 @@
+---
+title: "Understanding the DTFT: A Linear Algebra Perspective"
+layout: default
+---
 
 ## **Understanding the DTFT: A Linear Algebra Perspective**
 
