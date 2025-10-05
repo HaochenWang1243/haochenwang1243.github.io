@@ -101,6 +101,6 @@ $$
 \{ \vec{u}(\omega) \in \mathbb{C}^{\infty} \mid \vec{u}(\omega) = [e^{j\omega n} \text{ for } n \in \mathbb{Z}], \omega \in (-\pi, \pi) \}
 $$
 
-forms a continuous orthonormal basis for the space of absolute-summable sequences. The DTFT $X(e^{j\omega})$ provides the weights of this basis, offering a complete and elegant description of a signal in the frequency domain. 
+forms a continuous, alomst-orthonormal basis for the space of absolute-summable sequences. The DTFT $X(e^{j\omega})$ provides the weights of this basis, offering a complete and elegant description of a signal in the frequency domain. 
 
 The DTFT is not just a theoretical construct; it underpins many practical aspects of digital communications. For example, it directly informs the **Nyquist sampling theorem**, which states that a bandlimited signal with maximum frequency $f_\text{max}$ can be perfectly reconstructed from samples taken at a rate $f_s \ge 2 f_\text{max}$. This principle ensures that digital communication systems can sample, transmit, and reconstruct signals without aliasing. Moreover, the DTFT forms the foundation for **filter design**, **modulation schemes**, and **spectrum analysis**, making it an indispensable tool for engineers designing modern communication systems.
