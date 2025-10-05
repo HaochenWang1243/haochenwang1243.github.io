@@ -66,13 +66,12 @@ $$
 \langle \vec{u}(\omega), \vec{u}(\omega_0) \rangle = \sum_{n=-\infty}^{\infty} e^{j\omega n} e^{-j\omega_0 n} = \sum_{n=-\infty}^{\infty} e^{j(\omega - \omega_0)n}
 $$
 
-This infinite sum is zero for $\omega \neq \omega_0$ due to destructive interference of the rotating phasors. However, when $\omega = \omega_0$, every term is 1, and the sum diverges to infinity. This is the defining behavior of the Dirac delta function. Since $\omega, \omega_0 \in (-\pi, \pi)$, the difference $\omega - \omega_0 \in (-2\pi, 2\pi)$, and the only point where they are equal is at zero. In fact:
+This infinite sum is zero for $\omega \neq \omega_0$ due to destructive interference of the rotating phasors. However, when $\omega = \omega_0+2k\pi$, every term is 1, and the sum diverges to infinity. This is the defining behavior of (a train of) the Dirac delta function. Also, notice that for $\omega, \omega_0 \in (-\pi, \pi)$, only $k=0, \omega=\omega_0$ satisfies $\omega = \omega_0 + 2k\pi$. As a result,
 
-$$
-\sum_{n=-\infty}^{\infty} e^{j(\omega - \omega_0)n} = 2\pi \delta(\omega - \omega_0) \quad \text{over } \omega \in (-\pi, \pi)
-$$
+$$\sum_{n=-\infty}^{\infty} e^{j(\omega - \omega_0)n} = 2\pi \ \delta(\omega - \omega_0), 
+\quad \omega_0, \omega \in (-\pi, \pi).$$
 
-Where does the $2\pi$ come from? This is an interesting question on its own. I include the intuition but omit the rigor here for now, but I may write about it in the future!
+Where does the $2\pi$ come from? To answer this, we need a full derivation of the infinite sum of complex exponentials, which is non-trivial. For simplicity, I only include the intuition here, but I may write about the derivation in the future!  Yes, the basis is not perfectly orthonormal, but it's not too troublesome as you will see below.  
 
 ### **5. The Grand Finale: The DTFT as an Orthogonal Expansion**
 
@@ -92,7 +91,7 @@ $$
 x[n] = \frac{1}{2\pi} \int_{-\pi}^{\pi} X(e^{j\omega}) e^{j\omega n} \ d\omega = \frac{1}{2\pi} \int_{-\pi}^{\pi} C(\omega) \vec{u}(\omega)[n] \ d\omega
 $$
 
-The factor $\frac{1}{2\pi}$ is a normalization constant to ensure perfect reconstruction given our definition of the inner product.
+The factor $\frac{1}{2\pi}$ is a normalization constant to ensure perfect reconstruction.
 
 ## **Summary**
 
