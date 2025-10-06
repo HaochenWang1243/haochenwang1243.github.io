@@ -6,8 +6,10 @@ We have 2 limitations in practice compared to ideal "**DTFT on infinite duration
 1. We can only model finite-duration signal
 2. DTFT is continuous, we can't store it.
 
-#### Now, the approximation for "**DTFT of infinite duration signal**" is "**DFT of finite-duration signal**", and they are related as follows:
-### DFT of finite-duration signal = samples of (DTFT of (infinite duration signal that is formed by 0-padding the finite-duration signal)).  
+Refer to [here](FS as samples of FT of one period.md) for DFT relation to DTFT.
+
+#### Now, the approximation for "**DTFT of infinite duration signal**" is "**DFT of finite-duration signal**", and they are related as follows:  
+### DFT of finite-duration signal = samples of (DTFT of (infinite duration signal that is formed by 0-padding the finite-duration signal)).    
 ---
 
 ## 1. Infinite vs Finite Signals
