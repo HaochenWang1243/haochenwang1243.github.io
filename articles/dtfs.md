@@ -52,7 +52,6 @@ $$
 \text{ } N \text{ if } r = 0, \text{ and } 0 \text{ otherwise.}
 $$
 
-
 **Proof:**
 
 When $r \neq 0$:
@@ -91,7 +90,36 @@ $$
 
 ---
 
-### 6. Coefficient Computation (Analysis Equation)
+### 6. Spanning Set Proof
+
+To show that $\{\phi_k[n]\}_{k=0}^{N-1}$ spans the space:
+
+1. **Linear independence:** Suppose
+
+$$
+\sum_{k=0}^{N-1} c_k \phi_k[n] = 0 \quad \forall n = 0, \dots, N-1.
+$$
+
+Take the inner product with $\phi_m[n]$:
+
+$$
+\left\langle \sum_{k=0}^{N-1} c_k \phi_k, \phi_m \right\rangle
+= \sum_{k=0}^{N-1} c_k \langle \phi_k, \phi_m \rangle
+= \sum_{k=0}^{N-1} c_k \delta[k - m]
+= c_m = 0
+$$
+
+for all $m$. So all $c_k = 0$, proving **linear independence**.
+
+2. **Dimension argument:** The space of $N$-periodic signals is $N$-dimensional, and we have $N$ linearly independent vectors.  
+
+✅ By a standard linear algebra fact, **$N$ independent vectors in an $N$-dimensional space automatically span the space**.  
+
+Hence, any $N$-periodic signal can be expressed as a linear combination of $\phi_k[n]$.
+
+---
+
+### 7. Coefficient Computation (Analysis Equation)
 
 Using the orthonormal basis, we can project $x_p[n]$ onto each basis vector:
 
@@ -110,6 +138,7 @@ $$
 | Inner product | $\langle x, y \rangle = \sum x[n] y^*[n]$ |
 | Orthogonality | $\langle e^{j \frac{2\pi}{N} k n}, e^{j \frac{2\pi}{N} m n} \rangle = N \delta[k-m]$ |
 | Orthonormal basis | $\phi_k[n] = \frac{1}{\sqrt{N}} e^{j \frac{2\pi}{N} k n}$ |
+| Spanning | $N$ linearly independent basis vectors in $N$-dim space ⇒ any $x_p[n]$ can be expressed as their linear combination |
 
 ---
 
