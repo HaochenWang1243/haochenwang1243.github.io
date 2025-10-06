@@ -2,6 +2,7 @@
 
 In practice, all signals we process are **finite in duration**. Even when we generate "ideal" signals like sinusoids or sinc functions in MATLAB or Python, they are always truncated and discretely sampled. This has a direct effect in the frequency domain.
 
+### Remeber: DFT of finite-duration signal = samples of (DTFT of (infinite duration signal that is formed by 0-padding the finite-duration signal)).  
 ---
 
 ## 1. Infinite vs Finite Signals
