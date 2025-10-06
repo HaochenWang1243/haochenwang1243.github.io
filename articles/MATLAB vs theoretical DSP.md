@@ -1,4 +1,4 @@
-# Finite Signals and Frequency Domain Intuition
+# DFT on finite Signals: Frequency Domain Intuition
 
 In practice, all signals we process are **finite in duration**. Even when we generate "ideal" signals like sinusoids or sinc functions in MATLAB or Python, they are always truncated and discretely sampled. This has a direct effect in the frequency domain.
 
