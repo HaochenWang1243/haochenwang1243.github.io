@@ -57,9 +57,7 @@ $$
 where $W(\omega)$ is the FT of the window (e.g., $\mathrm{sinc}$ for a rectangular window).
 
 ---
-
-### 2. Consequences in Frequency Domain
-
+As a result,
 | Signal | Infinite FT | Finite FT | Effect |
 |--------|------------|-----------|-------|
 | Sinusoid | $\delta(\omega\pm \omega_0)$ | sinc-shaped lobe at $\pm \omega_0$ | Peak spreads, side-lobes → **spectral leakage** |
@@ -71,7 +69,7 @@ where $W(\omega)$ is the FT of the window (e.g., $\mathrm{sinc}$ for a rectangul
 
 ---
 
-### 3. Discrete-Time and DFT
+### 2. DFT samples the DTFT of finite-duration signal
 
 - In MATLAB, signals are **discrete**:
 
@@ -99,19 +97,19 @@ $$
 
 ---
 
-### 4. Practical Sanity Checks
+### 3. Effect of 0-padding sequnces in MATLAB on DFT
+Remember that the DFT is obtained by **sampling the DTFT** of the finite signal zero-padded to infinity.  
+Obviously, zero-padding the finite signal itself doesn’t change its DTFT, since the DTFT is taken on a signal already zero-padded to infinity.  
 
-Even with smoothing and sampling:
+What zero-padding the sequence does is simply **decrease the frequency bin width** $\frac{F_s}{N}$ by increasing $N$.  
+While the (DTFT sampling) resolution of the DFT is increased, the **shape of the DTFT being sampled doesn’t change**.  
 
-1. **Frequency location**: Peaks still occur near the true sinusoid frequencies.
-2. **Energy checks (Parseval)**: Total energy in time ≈ energy in frequency.
-3. **Linear properties**: Superposition, modulation, and convolution still behave approximately as predicted by DTFT.
+As a result, the **DTFT smoothing introduced by truncation isn’t improved** at all by zero-padding the sequence.
 
-**Note:** Be aware of **spectral leakage** and **frequency resolution** limits ($\Delta f \approx 1/T$).
 
 ---
 
-### 5. Summary Intuition
+### 4. Summary Intuition
 
 $$
 \text{Infinite continuous sine} \quad \xrightarrow{\text{Truncate and Discretize}} \text{Finite discrete sine} \quad \xrightarrow{\text{DTFT}} \text{sinc-smoothed spectrum (from truncation)} \quad \xrightarrow{\text{DFT/periodogram}} \text{sampled spectrum (from discretization)}
