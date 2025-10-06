@@ -1,4 +1,4 @@
-## 🧮 Linear Algebra Perspective of the Discrete-Time Fourier Series (DTFS)
+## 🧮 Linear Algebra Perspective of the Discrete-Time Fourier Series (DTFS) and Discrete Fourier Transform (DFT)
 
 ### 1. Setup
 
@@ -52,7 +52,7 @@ $$
 \text{ } N \text{ if } r = 0, \text{ and } 0 \text{ otherwise.}
 $$
 
-**Proof:**
+**Proof:**  
 
 When $r \neq 0$:
 
@@ -129,17 +129,34 @@ $$
 
 ---
 
-### ✅ Summary
+### 8. DTFS ↔ DFT
 
-| Concept | DTFS Interpretation |
-|----------|----------------------|
-| Vector space | $\mathbb{C}^N$, the space of $N$-periodic signals |
-| Basis functions | $e^{j \frac{2\pi}{N} k n}$, $k = 0, \ldots, N-1$ |
-| Inner product | $\langle x, y \rangle = \sum x[n] y^*[n]$ |
-| Orthogonality | $\langle e^{j \frac{2\pi}{N} k n}, e^{j \frac{2\pi}{N} m n} \rangle = N \delta[k-m]$ |
-| Orthonormal basis | $\phi_k[n] = \frac{1}{\sqrt{N}} e^{j \frac{2\pi}{N} k n}$ |
-| Spanning | $N$ linearly independent basis vectors in $N$-dim space ⇒ any $x_p[n]$ can be expressed as their linear combination |
+The **Discrete Fourier Transform (DFT)** is **numerically identical to the DTFS** for a finite-length sequence treated as **one period of a periodic signal**.  
 
----
+- Let $x[n]$ be a finite-length sequence of length $N$.  
+- Treat it as periodic with period $N$.  
+- The DFT computes the same coefficients as DTFS:
 
-Hence, the DTFS is **a coordinate transformation** from the **time-domain basis** (unit impulses at each sample) to the **frequency-domain orthonormal basis** of complex exponentials.
+$$
+X[k] = \sum_{n=0}^{N-1} x[n] \, e^{-j \frac{2\pi}{N} k n}, \quad k = 0, \dots, N-1
+$$
+
+$$
+x[n] = \frac{1}{N} \sum_{k=0}^{N-1} X[k] \, e^{j \frac{2\pi}{N} k n}, \quad n = 0, \dots, N-1
+$$
+
+- The **orthonormal basis vectors** are the same:
+
+$$
+\phi_k[n] = \frac{1}{\sqrt{N}} e^{j \frac{2\pi}{N} k n}
+$$
+
+- In **matrix form**:
+
+$$
+\mathbf{X} = \mathbf{F} \mathbf{x}, \quad 
+\mathbf{F}[k,n] = e^{-j 2 \pi k n / N}, \quad
+\mathbf{x} = \frac{1}{N} \mathbf{F}^H \mathbf{X}
+$$
+
+where $\mathbf{F}^H$ is the conjugate transpose of $\mathbf{F}$.
