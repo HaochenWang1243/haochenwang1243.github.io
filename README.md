@@ -1,5 +1,3 @@
-Welcome! I'm Haochen Wang, a machine learning and signal processing learner. Here, I write about my own thoughts on **digital signal processing**, **time series analysis**, and **ML applications in communications**.
-
-## Featured Articles
-
-- [Understanding the DTFT: A Linear Algebra Perspective](articles/dtft.md) – a detailed exploration of the Discrete-Time Fourier Transform through the lens of linear algebra.
+Welcome! I’m Haochen Wang, a learner and enthusiast in machine learning and signal processing.
+Here, I share short articles and thoughts on things that I find interesting in these areas.
+I’m still learning front-end web development with Jekyll, so while I finish setting up this site, you can visit the articles folder to read my posts (some written with some help from AI). The proper site will be up soon!
