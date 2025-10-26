@@ -1,5 +1,4 @@
-💯 Perfect question — and you’re absolutely right to notice that subtle assumption.  
-Yes — when we talk about the **Doppler spectrum** at a fixed delay, we’re implicitly grouping together **multiple multipath components that have approximately the same propagation delay**.
+When we talk about the **Doppler spectrum** at a fixed delay, we’re implicitly grouping together **multiple multipath components that have approximately the same propagation delay**.
 
 Let’s unpack this carefully and see *why* this makes sense, physically and mathematically.
 
