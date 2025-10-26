@@ -85,3 +85,6 @@ $$
 - Fixing $\tau$ groups **paths of similar length** (≈ same delay).  
 - Fourier transforming over $t$ reveals how **their combined energy** is distributed over Doppler frequencies (due to relative motion).  
 - The width of that Doppler distribution = **Doppler spread** for that delay bin.
+
+## 🔹 6. Example
+![Delay-Doppler Illustration](../pictures/doppler-ex.jpeg)
