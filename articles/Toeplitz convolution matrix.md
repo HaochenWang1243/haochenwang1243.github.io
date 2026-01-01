@@ -14,7 +14,7 @@ i & h & g & f & a
 \end{array}\right] .
 $$
 
-We consider a **causal** channel impulse response (CIR) of length $L$:
+We can consider a **causal** channel impulse response (CIR) of length $L$:
 
 $$
 \mathbf{h} = [h_0, h_1, \dots, h_{L-1}]^T
@@ -26,7 +26,8 @@ $$
 \mathbf{x} = [x_0, x_1, \dots, x_{N-1}]^T.
 $$
 
----
+However, either or both can be noncausal, and this is reflected in the structure of the Toeplitz matrix. This is discussed in section 3.  
+Let's look at the convolution matrix definition below first.
 
 ## 2. Full Convolution Matrix
 
@@ -63,9 +64,94 @@ $$
 
 ---
 
+## 3. Example computation of the (full) Toeplitz convolution matrix
+Notice that $y[i]$ is the dot product of $x$ and $i_{th}$ row of H.  
+
+### 1. Setup
+
+* Input $x[n]$ has **negative indices**:
+
+$$
+x = [x_{-1}, x_0, x_1]^T
+$$
+
+* Channel $h[k]$ also has **negative taps**:
+
+$$
+h = [h_{-1}, h_0, h_1]^T = [1, 2, 1]
+$$
+
+* Convolution formula:
+
+$$
+y[n] = \sum_k h[k] x[n-k]
+$$
+
+* We **do not assume zero before n=0**, because input is non-causal.
+
+---
+
+### 2. Compute outputs manually
+
+Let’s compute a few outputs for clarity:
+
+1. **$y_{-1}$:**
+
+$$
+y_{-1} = h[-1] x[-1 - (-1)] + h[0] x[-1 - 0] + h[1] x[-1 - 1]
+= h[-1] x[0] + h[0] x[-1] + h[1] x[-2]
+= 1·x_0 + 2·x_{-1} + 1·0
+= 2 x_{-1} + x_0
+$$
+
+2. **$y_0$:**
+
+$$
+y_0 = h[-1] x[1] + h[0] x[0] + h[1] x[-1]
+= 1·x_1 + 2·x_0 + 1·x_{-1}
+= x_1 + 2 x_0 + x_{-1}
+$$
+
+3. **$y_1$:**
+
+$$
+y_1 = h[-1] x[2] + h[0] x[1] + h[1] x[0]
+= 1·0 + 2·x_1 + 1·x_0
+= x_0 + 2 x_1
+$$
+
+---
+
+### 3. Toeplitz matrix
+
+Columns = input samples $[x_{-1}, x_0, x_1]$  
+Rows = output samples $[y_{-1}, y_0, y_1]$
+
+$$
+H =
+\begin{bmatrix}
+h[0] & h[-1] & 0 \\
+h[1] & h[0] & h[-1] \\ 
+0 & h[1] & h[0] \\         
+\end{bmatrix}
+$$
+
+$$
+\begin{bmatrix}
+2 & 1 & 0 \\
+1 & 2 & 1 \\
+0 & 1 & 2 \\
+\end{bmatrix}
+$$
+
+✅**Note**: This is not a lower triangular matrix. The convolution matrix can in general have any type of nonzero entry layout within Toeplitz strcuture.  
+
+---
+
+
 ## 3. Truncated (Causal) Toeplitz Matrix
 
-In the paper, the channel matrix $\hat{H}$ is an $N \times N$ **lower-triangular Toeplitz matrix** constructed by **padding** $\mathbf{h}$ with zeros to length $N$:
+In the [paper](https://ieeexplore.ieee.org/document/10974467), the channel matrix $\hat{H}$ is an $N \times N$ **lower-triangular Toeplitz matrix** constructed by **padding** $\mathbf{h}$ with zeros to length $N$:
 
 $$
 \mathbf{h}_{\text{ext}} = [h_0, h_1, \dots, h_{L-1}, 0, \dots, 0]^T \quad (\text{length } N)
