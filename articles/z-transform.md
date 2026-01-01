@@ -44,19 +44,58 @@ where $p_k$ are the poles and $R_k$ are the residues corresponding to each pole.
 
 ## 4. Representation by Summation of Exponentials
 
-Using the inverse z-transform on each IIR term (conveninent z-transform pair, equivalent to the contour integral above):
+A channel with a **rational polynomial (RP) transfer function** can always be decomposed into a sum of simpler IIR terms using partial fraction expansion:
+
+$$
+H(z) = \sum_{k=1}^{N} \frac{R_k}{1 - p_k z^{-1}}
+$$
+
+The corresponding impulse response can be expressed as a sum of exponentials of the poles. The exact form depends on whether the system is causal or non-causal.
+
+The key point is that the **inverse z-transform is not uniquely determined by $H(z)$ alone**; it also depends on the **region of convergence (ROC)** in the complex plane. The ROC determines which sequence corresponds to a given $H(z)$:
+
+- **Causal ROC:** $|z| > \max(|p_k|)$ → inverse z-transform produces a **causal sequence** $h[n]$ with nonzero values for $n \ge 0$.  
+- **Anti-causal ROC:** $|z| < \min(|p_k|)$ → inverse z-transform produces an **anti-causal sequence** $h[n]$ with nonzero values for $n < 0$.  
+- **Two-sided ROC:** $|p_{\min}| < |z| < |p_{\max}|$ → inverse z-transform produces a **non-causal sequence** with nonzero values for both positive and negative $n$.  
+
+### 4.1 Causal Channels
+
+For a **causal channel**, the impulse response is zero for $n<0$. Using the inverse z-transform of each term:
 
 $$
 \mathcal{Z}^{-1}\{\frac{R_k}{1 - p_k z^{-1}}\} = R_k p_k^n u[n]
 $$
 
-where $u[n]$ is the unit step.  
+where $u[n]$ is the unit step function.  
 
-Thus, **any channel with a rational polynomial transfer function can be represented as a summation of exponential terms of the poles**:
+Thus, the impulse response of a causal RP channel can be written as:
 
 $$
-h[n] = \sum_{k=1}^{N} R_k p_k^n u[n]
+h_{\text{causal}}[n] = \sum_{k=1}^{N} R_k p_k^n u[n]
 $$
+
+This is the familiar representation as a sum of exponentials starting from $n=0$.
+
+### 4.2 Non-Causal Channels
+
+For a **non-causal channel**, the impulse response may be nonzero for both positive and negative $n$.  
+Thus, its impulse response can be written as a sum of **causal and anti-causal exponential terms**:
+
+$$
+h_{\text{non-causal}}[n] = \sum_{k=1}^{N_1} R_k p_k^n u[n] + \sum_{l=1}^{N_2} S_l q_l^n u[-n-1]
+$$
+
+where:
+
+- The first sum represents the **causal portion** ($n \ge 0$), with poles $p_k$ inside the ROC associated with $|z| > |p_k|$.  
+- The second sum represents the **anti-causal portion** ($n < 0$), with poles $q_l$ inside the ROC associated with $|z| < |q_l|$.  
+- $R_k$ and $S_l$ are residues corresponding to each pole in their respective partial fraction expansions.  
+
+**Key point:**  
+
+> The same algebraic transfer function $H(z)$ can produce different impulse responses depending on **which ROC we choose**, i.e., whether the system is causal, anti-causal, or non-causal.  
+>
+> Causality is therefore **fully determined by the ROC**, not by the algebraic form of $H(z)$ itself.
 
 ---
 
