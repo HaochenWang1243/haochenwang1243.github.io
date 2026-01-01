@@ -218,7 +218,7 @@ Physically, these correspond to **inter-block interference** if consecutive data
 |--------|------------------------|---------------------------|
 | **Size** | $(N+L-1) \times N$ | $N \times N$ |
 | **Output length** | $N+L-1$ | $N$ |
-| **Causality** | Physically causal, but not square | Causal + square |
+| **Causality** | can be noncausal and not square | assumes causal (first row has only first entry being nonzero), square |
 | **Information loss** | None | Last $L-1$ output samples |
 | **Use in equalizer design** | Cannot be directly inverted | Invertible (enables ZF equalizer $\hat{H}^{-1}$) |
 | **Suitability for PCA** | Difficult (non-square) | Straightforward (square covariance structure) |
