@@ -70,25 +70,7 @@ $$
 
 ---
 
-## 5. Projection onto Principal Components
-
-For dimension reduction to $k$ dimensions:
-
-$$
-U_k = [u_1, u_2, \dots, u_k] \in \mathbb{R}^{d \times k}
-$$
-
-Project data:
-
-$$
-Y = U_k^T \tilde{X} \in \mathbb{R}^{k \times n}
-$$
-
-Each column of $Y$ is the representation of the original sample in the top $k$ PCA components.
-
----
-
-## 6. Multiple Principal Components
+## 5. Multiple Principal Components
 
 ### First component
 
@@ -122,7 +104,7 @@ $$
 
 ---
 
-## 7. Residual Variance Explanation
+## 6. Justification of the recursive component-finding formulation and orthogonality of PCs
 
 Residual covariance after removing first component:
 
@@ -139,10 +121,6 @@ $$
 * Non-orthogonal vectors are penalized automatically.
 * Maximizing residual variance enforces orthogonality implicitly.
 
----
-
-## 8. Orthogonality of Eigenvectors
-
 Covariance matrix $C$ is symmetric:
 
 $$
@@ -156,6 +134,24 @@ C u_1 = \lambda_1 u_1, \quad C u_2 = \lambda_2 u_2, \quad \lambda_1 \neq \lambda
 $$
 
 For repeated eigenvalues, an orthonormal basis can be constructed within the eigenspace. Hence **PCA eigenvectors are orthogonal**.
+
+---
+
+## 8. Projection onto Principal Components
+
+For dimension reduction to $k$ dimensions:
+
+$$
+U_k = [u_1, u_2, \dots, u_k] \in \mathbb{R}^{d \times k}
+$$
+
+Project data:
+
+$$
+Y = U_k^T \tilde{X} \in \mathbb{R}^{k \times n}
+$$
+
+Each column of $Y$ is the representation of the original sample in the top $k$ PCA components.
 
 ---
 
@@ -185,6 +181,166 @@ $$
 * When $d \gg n$, SVD avoids computing $C$ explicitly.
 
 ---
+
+## 10. Equivalence Between PCA Reconstruction and SVD Low-Rank Approximation
+
+### 10.1 PCA Reconstruction Formula
+
+Given a centered data vector $x \in \mathbb{R}^d$ (a column of $\tilde{X}$), its reconstruction using the top $k$ principal components is:
+
+$$
+\hat{x} = U_k (U_k^T x) = \sum_{i=1}^k (u_i^T x) u_i
+$$
+
+where $U_k = [u_1, \dots, u_k] \in \mathbb{R}^{d \times k}$ contains the first $k$ eigenvectors of $C$.
+
+**Interpretation:**
+- $u_i^T x$ is the projection coefficient (score) onto the $i$-th PC
+- $\sum_{i=1}^k (u_i^T x) u_i$ reconstructs $x$ using only the top $k$ components
+- The reconstruction error is $x - \hat{x} = \sum_{i=k+1}^d (u_i^T x) u_i$
+
+---
+
+### 10.2 SVD Low-Rank Approximation
+
+Recall the SVD of the centered data matrix:
+
+$$
+\tilde{X} = U \Sigma V^T = \sum_{i=1}^r \sigma_i u_i v_i^T
+$$
+
+where $r = \text{rank}(\tilde{X})$, $U \in \mathbb{R}^{d \times r}$, $\Sigma \in \mathbb{R}^{r \times r}$, $V \in \mathbb{R}^{n \times r}$.
+
+The **best rank-$k$ approximation** (in Frobenius norm) to $\tilde{X}$ is:
+
+$$
+\tilde{X}_k = \sum_{i=1}^k \sigma_i u_i v_i^T = U_k \Sigma_k V_k^T
+$$
+
+where $\Sigma_k = \text{diag}(\sigma_1, \dots, \sigma_k)$, $V_k = [v_1, \dots, v_k]$.
+
+---
+
+### 10.3 Connection for Individual Data Points
+
+Consider the $j$-th centered data point $x_j$ (the $j$-th column of $\tilde{X}$). From SVD:
+
+$$
+x_j = \tilde{X} e_j = U \Sigma V^T e_j = \sum_{i=1}^r \sigma_i u_i (v_i^T e_j)
+$$
+
+where $e_j$ is the $j$-th standard basis vector in $\mathbb{R}^n$.
+
+The rank-$k$ approximation gives:
+
+$$
+\hat{x}_j^{(SVD)} = \tilde{X}_k e_j = \sum_{i=1}^k \sigma_i u_i (v_i^T e_j)
+$$
+
+---
+
+### 10.4 Equivalence Proof
+
+From PCA reconstruction:
+
+$$
+\hat{x}_j^{(PCA)} = U_k (U_k^T x_j) = \sum_{i=1}^k (u_i^T x_j) u_i
+$$
+
+From SVD, note that:
+
+$$
+u_i^T x_j = u_i^T (\tilde{X} e_j) = u_i^T (U \Sigma V^T e_j) = e_i^T \Sigma V^T e_j = \sigma_i v_i^T e_j
+$$
+
+because $U$ has orthonormal columns: $u_i^T U = e_i^T$ where $e_i$ is the $i$-th standard basis vector.
+
+Therefore:
+
+$$
+\hat{x}_j^{(PCA)} = \sum_{i=1}^k (\sigma_i v_i^T e_j) u_i = \sum_{i=1}^k \sigma_i u_i (v_i^T e_j) = \hat{x}_j^{(SVD)}
+$$
+
+---
+
+### 10.5 Matrix Form Equivalence
+
+For all data points simultaneously:
+
+**PCA reconstruction:**
+
+$$
+\hat{X}^{(PCA)} = U_k U_k^T \tilde{X}
+$$
+
+**SVD rank-$k$ approximation:**
+
+$$
+\hat{X}^{(SVD)} = U_k \Sigma_k V_k^T
+$$
+
+But from SVD: $\tilde{X} = U \Sigma V^T$, so:
+
+$$
+U_k^T \tilde{X} = U_k^T U \Sigma V^T = [I_k \ 0] \Sigma V^T = \Sigma_k V_k^T
+$$
+
+Therefore:
+
+$$
+U_k U_k^T \tilde{X} = U_k (\Sigma_k V_k^T) = U_k \Sigma_k V_k^T = \hat{X}^{(SVD)}
+$$
+
+---
+
+### 10.6 Geometric Interpretation
+
+The operation $U_k U_k^T$ is the **orthogonal projection** onto the subspace spanned by the top $k$ principal components. This projection:
+
+1. **Preserves** components in the PCA subspace
+2. **Discards** components orthogonal to it
+3. **Minimizes** reconstruction error $\|\tilde{X} - \hat{X}\|_F^2$ among all rank-$k$ matrices
+
+The squared reconstruction error per sample is:
+
+$$
+\mathbb{E}[\|x - \hat{x}\|^2] = \sum_{i=k+1}^d \lambda_i
+$$
+
+where $\lambda_i$ are the eigenvalues of $C$ (variances along discarded PCs).
+
+---
+
+### 10.7 Summary of Equivalence
+
+| Concept | PCA Formulation | SVD Formulation | Equivalence |
+|---------|-----------------|-----------------|-------------|
+| **Subspace** | Span of $u_1, \dots, u_k$ | Span of first $k$ left singular vectors | $U_k$ (same) |
+| **Projection** | $P = U_k U_k^T$ | $P = U_k U_k^T$ | Identical |
+| **Coefficients** | $U_k^T x$ | $\Sigma_k V_k^T$ columns | Related by scaling |
+| **Reconstruction** | $\hat{x} = U_k U_k^T x$ | $\hat{x} = \sum_{i=1}^k \sigma_i (v_i^T e_j) u_i$ | Identical |
+| **Matrix approx** | $\hat{X} = U_k U_k^T \tilde{X}$ | $\hat{X} = U_k \Sigma_k V_k^T$ | $U_k U_k^T \tilde{X} = U_k \Sigma_k V_k^T$ |
+
+---
+
+## 11. Eckart–Young–Mirsky Theorem
+
+**Statement**:  
+Let $X \in \mathbb{R}^{m \times n}$ with singular value decomposition $X = U \Sigma V^T$, where  
+$\Sigma = \text{diag}(\sigma_1, \sigma_2, \dots, \sigma_p)$, $\sigma_1 \geq \sigma_2 \geq \dots \geq \sigma_p \geq 0 $, and $p = \min(m,n)$.  
+Define the rank-$k$ approximation $X_k = U \Sigma_k V^T$, where $\Sigma_k$ is $\Sigma$ with $\sigma_{k+1}, \dots, \sigma_p$ set to 0.
+
+Then for any rank-$r$ matrix $B$ with $r \leq k < \text{rank}(X)$:
+
+$$
+\| X - X\_k \| \leq \| X - B \|
+$$
+
+for **both** the Frobenius norm $\|\cdot\|\_F$ and the spectral norm $\|\cdot\|\_2$
+Moreover, $X\_k$ is a minimizer (not necessarily unique if $\sigma_k = \sigma_{k+1}$).
+
+
+**Key Insight:** PCA reconstruction $U\_k U\_k^T x$ is exactly the orthogonal projection of $x$ onto the principal subspace, which is mathematically equivalent to the rank- $k$ approximation provided by truncated SVD. Both SVD low-rank approximation and PCA reconstruction are orthogonal projections of vectors in the data matrix onto the optimal low-dimensional subspace, where "optimal" means minimizing the reconstruction error in Frobenius/ℓ² norm over the whole data matrix. This optimal subspace is spanned by the (orthogonal) basis formed by columns of $U_k$
 
 ### Summary Table
 
