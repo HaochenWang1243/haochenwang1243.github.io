@@ -1,4 +1,4 @@
-# Principal Component Analysis (PCA) - Math Explanation
+# Principal Component Analysis and its relation to SVD
 
 This document explains PCA mathematically, step by step, including the connection to SVD and how multiple principal components are derived.
 
@@ -70,74 +70,105 @@ $$
 
 ---
 
-## 5. Multiple Principal Components
+## 5. Multiple Principal Components (Lagrange multiplier derivation)
 
-### First component
-
-Solve unconstrained:
+Instead of imposing orthogonality by hand, we maximize **total variance in two directions at once**:
 
 $$
-\max_{|u|=1} u^T C u
+\max_{u_1, u_2} \quad u_1^T C u_1 + u_2^T C u_2
 $$
 
-Gives $u_1$, eigenvector with largest eigenvalue $\lambda_1$.
-
-### Second component
-
-Maximize remaining variance **orthogonal** to $u_1$:
+subject to unit-length constraints:
 
 $$
-\max_{|u_2|=1, u_2^T u_1=0} u_2^T C u_2
+u_1^T u_1 = 1, \qquad u_2^T u_2 = 1
 $$
 
-This yields $u_2$, eigenvector with second-largest eigenvalue $\lambda_2$.
-
-### Recursive formulation
-
-For the $k$-th component:
+Form the Lagrangian:
 
 $$
-\max_{|u_k|=1, u_k^T u_i = 0, i=1,\dots,k-1} u_k^T C u_k
+\mathcal{L} = 
+u_1^T C u_1 + u_2^T C u_2
+- \lambda_1 (u_1^T u_1 - 1)
+- \lambda_2 (u_2^T u_2 - 1)
 $$
 
-* Sequential variance maximization subject to orthogonality.
+Take derivatives:
+
+$$
+\frac{\partial \mathcal{L}}{\partial u_1} = 2 C u_1 - 2\lambda_1 u_1 = 0
+\quad \Rightarrow \quad
+C u_1 = \lambda_1 u_1
+$$
+
+$$
+\frac{\partial \mathcal{L}}{\partial u_2} = 2 C u_2 - 2\lambda_2 u_2 = 0
+\quad \Rightarrow \quad
+C u_2 = \lambda_2 u_2
+$$
+
+Thus:
+
+- $u_1$ and $u_2$ are eigenvectors of $C$
+- Ordering eigenvalues gives:
+
+$$
+\lambda_1 \ge \lambda_2
+$$
+
+Because $C$ is symmetric, eigenvectors associated with distinct eigenvalues are automatically orthogonal, so:
+
+$$
+u_1^T u_2 = 0
+$$
+
+Orthogonality is therefore **not imposed — it emerges from the optimization**.
 
 ---
 
-## 6. Justification of the recursive component-finding formulation and orthogonality of PCs
+## 6. Geometric justification of orthogonality
 
-Residual covariance after removing first component:
-
-$$
-C_{\text{res}} = C - \lambda_1 u_1 u_1^T
-$$
-
-Residual variance of any unit vector $u$:
+Consider projecting data onto the 2-D subspace spanned by two vectors:
 
 $$
-u^T C_{\text{res}} u = u^T C u - \lambda_1 (u^T u_1)^2
+\hat{x} = (u_1 u_1^T + u_2 u_2^T)x
 $$
 
-* Non-orthogonal vectors are penalized automatically.
-* Maximizing residual variance enforces orthogonality implicitly.
+If $u_2$ is not orthogonal to $u_1$, then part of the variance explained by $u_2$ lies in the same direction as $u_1$.
 
-Covariance matrix $C$ is symmetric:
+That means we:
+
+- double-count variance
+- fail to expand the spread of data into a new dimension
+- waste the second component
+
+### 6.1 Decomposition of variance
+
+Take any candidate direction $u$ and decompose it into parts parallel and orthogonal to $u_1$:
 
 $$
-C^T = C
+u = \alpha u_1 + u_{\perp}, \qquad u_1^T u_{\perp} = 0.
 $$
 
-Eigenvectors corresponding to distinct eigenvalues are orthogonal:
+Then
 
 $$
-C u_1 = \lambda_1 u_1, \quad C u_2 = \lambda_2 u_2, \quad \lambda_1 \neq \lambda_2 \implies u_1^T u_2 = 0
+u^T C u = \alpha^2 \lambda_1 + u_{\perp}^T C u_{\perp}.
 $$
 
-For repeated eigenvalues, an orthonormal basis can be constructed within the eigenspace. Hence **PCA eigenvectors are orthogonal**.
+The first term $\alpha^2 \lambda\_1$ is simply variance **already captured by $u\_1$**.
+
+To genuinely add new variance, we should maximize only the orthogonal part:
+
+$$
+u\_{\perp}^T C u\_{\perp}.
+$$
+
+This expression is maximized when $u\_{\perp}$ is the eigenvector associated with the second-largest eigenvalue.
 
 ---
 
-## 8. Projection onto Principal Components
+## 7. Projection onto Principal Components
 
 For dimension reduction to $k$ dimensions:
 
@@ -153,9 +184,26 @@ $$
 
 Each column of $Y$ is the representation of the original sample in the top $k$ PCA components.
 
+### Terminology Notice: $\mathbb{R}^d \rightarrow \text{subspace in } \mathbb{R}^d$ projection vs $\mathbb{R}^d \rightarrow \mathbb{R}^k$ projection     
+The PCA dimensionality reduction achieved by computing 
+
+$$
+Y = U_k^T \tilde{X} \in \mathbb{R}^{k \times n},
+$$
+
+gives the **coordinate vectors** of the data projected onto the k-dimensional space spanned by principal components. This is a $\mathbb{R}^d \rightarrow \mathbb{R}^k$ trasnformation. 
+
+On the other hand,  
+
+$$
+\hat{X} = U_k U_k^T \tilde{X} \in \mathbb{R}^{d \times n},
+$$
+
+is the orthogonal projection of the vectors in the data matrix, which belong to $\mathbb{R}^d$, to the k-dimensional linear subspace $S \subset \mathbb{R}^d$ spanned by the PCs. This is a geometrical orthogonal projection where one draws a straight line from $\mathbb{R}^d$ to $S$. This is a $\mathbb{R}^d \rightarrow S$ trasnformation that linearly combines the basis vectors in $U_k$ by the coordinates $Y = U_k^T \tilde{X}$, and can be seen as a low-dimensional "reconstruction" of $\tilde{X}$.
+
 ---
 
-## 9. Connection to SVD
+## 8. Connection to SVD
 
 Take the SVD of centered data:
 
@@ -182,9 +230,9 @@ $$
 
 ---
 
-## 10. Equivalence Between PCA Reconstruction and SVD Low-Rank Approximation
+## 9. Equivalence Between PCA Reconstruction and SVD Low-Rank Approximation
 
-### 10.1 PCA Reconstruction Formula
+### 9.1 PCA Reconstruction Formula
 
 Given a centered data vector $x \in \mathbb{R}^d$ (a column of $\tilde{X}$), its reconstruction using the top $k$ principal components is:
 
@@ -201,7 +249,7 @@ where $U_k = [u_1, \dots, u_k] \in \mathbb{R}^{d \times k}$ contains the first $
 
 ---
 
-### 10.2 SVD Low-Rank Approximation
+### 9.2 SVD Low-Rank Approximation
 
 Recall the SVD of the centered data matrix:
 
@@ -221,7 +269,7 @@ where $\Sigma_k = \text{diag}(\sigma_1, \dots, \sigma_k)$, $V_k = [v_1, \dots, v
 
 ---
 
-### 10.3 Connection for Individual Data Points
+### 9.3 Connection for Individual Data Points
 
 Consider the $j$-th centered data point $x_j$ (the $j$-th column of $\tilde{X}$). From SVD:
 
@@ -239,7 +287,7 @@ $$
 
 ---
 
-### 10.4 Equivalence Proof
+### 9.4 Equivalence Proof
 
 From PCA reconstruction:
 
@@ -263,7 +311,7 @@ $$
 
 ---
 
-### 10.5 Matrix Form Equivalence
+### 9.5 Matrix Form Equivalence
 
 For all data points simultaneously:
 
@@ -293,7 +341,7 @@ $$
 
 ---
 
-### 10.6 Geometric Interpretation
+### 9.6 Geometric Interpretation
 
 The operation $U_k U_k^T$ is the **orthogonal projection** onto the subspace spanned by the top $k$ principal components. This projection:
 
@@ -311,7 +359,7 @@ where $\lambda_i$ are the eigenvalues of $C$ (variances along discarded PCs).
 
 ---
 
-### 10.7 Summary of Equivalence
+### 9.7 Summary of Equivalence
 
 | Concept | PCA Formulation | SVD Formulation | Equivalence |
 |---------|-----------------|-----------------|-------------|
@@ -323,7 +371,7 @@ where $\lambda_i$ are the eigenvalues of $C$ (variances along discarded PCs).
 
 ---
 
-## 11. Eckart–Young–Mirsky Theorem
+## 10. Eckart–Young–Mirsky Theorem
 
 **Statement**:  
 Let $X \in \mathbb{R}^{m \times n}$ with singular value decomposition $X = U \Sigma V^T$, where  
