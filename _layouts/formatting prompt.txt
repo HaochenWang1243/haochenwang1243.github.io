@@ -2,4 +2,4 @@ A few formatting things:
 1. Use $...$ and $$...$$ instead of \(...\) and \[...\]
 2. Make sure every $$...$$ block has one empty line distance from both content above and below. 
 3. Make sure there's no white space between each $...$ and the content it encloses.
-3. Put \ before each underscore and asterisk within $...$ or $$...$$ to escape the perception as markdown bold symbol. 
+4. Put \ before each underscore and asterisk (also enclose \* as {\*} if its a subscript or superscript) within $...$ or $$...$$ to escape the perception as markdown bold symbol. 
