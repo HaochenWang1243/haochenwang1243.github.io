@@ -6,6 +6,8 @@
 - **mixed-phase system**: A mixed-phase system has some of its zeros inside the unit circle and has others outside the unit circle. 
 **Note**: In all 3 classes, the *original* system is assumed to be causal and stable, i.e., ROC lies to the right the outermost pole and all poles are within unit circle. That is, we only talk about phase characteristics of a system only if it's causal and stable.
 
+**Group delay**:
+![](../pictures/phase_and_phase_delay.jpg)
 
 ## 1. Setup and Assumptions
 
