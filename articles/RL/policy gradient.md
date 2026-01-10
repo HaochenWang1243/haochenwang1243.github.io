@@ -4,7 +4,13 @@
 
 ### 1.1 Markov Decision Process (MDP)
 
-A Markov Decision Process (MDP) is defined by the tuple $$(S, A, P, R, \gamma)$$ where:
+A Markov Decision Process (MDP) is defined by the tuple
+
+$$
+(S, A, P, R, \gamma)
+$$
+
+where:
 
 * $S$ is the set of states
 * $A$ is the set of actions
@@ -25,7 +31,7 @@ $$
 * **Input:** state $s$
 * **Output:** probability of taking action $a$
 
-Actions are sampled from the policy, and the policy itself depends on parameters $\theta$ in a parametrized form $\pi_\theta(a{*}\mid s)$.
+Actions are sampled from the policy, and the policy itself depends on parameters $\theta$ in a parametrized form $\pi\_\theta(a{*}\mid s)$.
 
 ### 1.3 Trajectory and Probability of a Trajectory
 
@@ -35,20 +41,20 @@ $$
 \tau = (s_0, a_0, s_1, a_1, \dots, s_T, a_T)
 $$
 
-The probability of a specific trajectory under policy $\pi_\theta$ is:
+The probability of a specific trajectory under policy $\pi\_\theta$ is:
 
 $$
-p_\theta(\tau) = p(s_0) \prod_{t=0}^{T} \pi_\theta(a_t\mid s_t) P(s_{t+1}\mid s_t, a_t)
+p\_\theta(\tau) = p(s_0) \prod_{t=0}^{T} \pi\_\theta(a_t\mid s_t) P(s_{t+1}\mid s_t, a_t)
 $$
 
-* $p(s_0)$: initial state distribution
-* $\pi_\theta(a_t{*}\mid s_t)$: policy
-* $P(s_{t+1}{*}\mid s_t, a_t)$: environment transition
+* $p(s_0)$: initial state distribution  
+* $\pi\_\theta(a_t{*}\mid s_t)$: policy  
+* $P(s_{t+1}{*}\mid s_t, a_t)$: environment transition  
 
 Expectation over trajectories:
 
 $$
-\mathbb{E}*{\tau \sim \pi*\theta}[f(\tau)] = \sum_{\text{all trajectories }\tau} p_\theta(\tau) f(\tau)
+\mathbb{E}*{\tau \sim \pi*\theta}[f(\tau)] = \sum_{\text{all trajectories }\tau} p\_\theta(\tau) f(\tau)
 $$
 
 This averages over **initial states, actions chosen by the policy, and environment transitions**.
@@ -77,7 +83,7 @@ This is used in policy gradient to weight the expectation over states according 
 
 ### 2.1 Objective Function
 
-The expected return under policy $\pi_\theta$ is:
+The expected return under policy $\pi\_\theta$ is:
 
 $$
 J(\theta) = \mathbb{E}*{\tau \sim \pi*\theta} \Big[ \sum_{t=0}^{T} r(s_t, a_t) \Big]
@@ -85,36 +91,76 @@ $$
 
 The gradient of the objective is computed to improve the policy parameters $\theta$.
 
+---
+
 ### 2.2 Trajectory (REINFORCE) Form
 
 Using the log-derivative trick, the gradient can be expressed as:
 
 $$
-\nabla_\theta J(\theta) = \mathbb{E}*{\tau \sim \pi*\theta} \Big[ \sum_{t=0}^{T} \nabla_\theta \log \pi_\theta(a_t{*}\mid s_t) \sum_{\tau=t}^{T} \gamma^{\tau-t} r(s_\tau, a_\tau) \Big]
+\nabla\_\theta J(\theta) = \mathbb{E}*{\tau \sim \pi*\theta} \Big[ \sum_{t=0}^{T} \nabla\_\theta \log \pi\_\theta(a_t{*}\mid s_t) \sum_{\tau=t}^{T} \gamma^{\tau-t} r(s_\tau, a_\tau) \Big]
 $$
 
-* $G_t = \sum_{\tau=t}^{T} \gamma^{\tau-t} r(s_\tau, a_\tau)$ is the return starting at time $t$
-* The outer expectation averages over **entire trajectories**, which includes **states and actions**.
+* $G_t = \sum_{\tau=t}^{T} \gamma^{\tau-t} r(s_\tau, a_\tau)$ is the return starting at time $t$  
+* The outer expectation averages over **entire trajectories**, which includes **states and actions**
+
+This is equivalent to the **REINFORCE algorithm**.
+
+---
 
 ### 2.3 Policy Gradient Theorem Form
 
-Using conditional expectation over future trajectories and defining the Q-function:
+Define the Q-function:
 
 $$
 Q^\pi(s_t, a_t) = \mathbb{E}[G_t \mid s_t, a_t] = \mathbb{E}*{\text{future}} \Big[ \sum*{\tau=t}^{T} \gamma^{\tau-t} r(s_\tau, a_\tau) \Big| s_t, a_t \Big]
 $$
 
-Then the gradient can be rewritten as:
+Then the gradient can be rewritten using the **state visitation distribution**:
 
 $$
-\nabla_\theta J(\theta) = \mathbb{E}*{s \sim d^\pi, a \sim \pi*\theta} [ \nabla_\theta \log \pi_\theta(a{*}\mid s) Q^\pi(s,a) ]
+\nabla\_\theta J(\theta) = \mathbb{E}*{s \sim d^\pi, a \sim \pi*\theta} \Big[ \nabla\_\theta \log \pi\_\theta(a{*}\mid s) Q^\pi(s,a) \Big]
 $$
 
-* Outer expectation is over **states sampled from the state visitation distribution** and actions sampled from the policy
+* Outer expectation is over **states sampled from $d^\pi(s)$** and actions sampled from $\pi_\theta$  
 * Inner expectation (inside $Q^\pi$) is over **future trajectory starting from $(s,a)$**
+
+---
 
 ### 2.4 Equivalence
 
-* REINFORCE form uses the **sampled return** as an unbiased estimate of $Q^\pi(s,a)$
-* Policy gradient theorem expresses the expectation directly using $Q^\pi(s,a)$
+* REINFORCE form uses the **sampled return** $G_t$ as an unbiased estimate of $Q^\pi(s,a)$  
+* Policy gradient theorem expresses the expectation directly using $Q^\pi(s,a)$  
 * Both forms are **mathematically equivalent**; REINFORCE is a **Monte Carlo estimator** of the policy gradient theorem expression
+
+---
+
+### 2.5 Optional: Baseline for Variance Reduction
+
+To reduce variance, we can subtract a baseline $b(s_t)$ (commonly $V^\pi(s_t)$):
+
+$$
+\nabla\_\theta J(\theta) = \mathbb{E}*{\tau \sim \pi*\theta} \Big[ \sum_{t=0}^{T} \nabla\_\theta \log \pi\_\theta(a_t{*}\mid s_t) \big(G_t - b(s_t)\big) \Big]
+$$
+
+* This does **not change the expectation** because $\mathbb{E}[\nabla\_\theta \log \pi_\theta(a_t{*}\mid s_t) b(s_t)] = 0$  
+* Reduces variance and improves learning stability
+
+---
+
+### 2.6 Summary of Policy Gradient Forms
+
+**Trajectory / REINFORCE form:**
+
+$$
+\nabla\_\theta J(\theta) = \mathbb{E}*{\tau \sim \pi*\theta} \Big[ \sum_{t=0}^{T} \nabla\_\theta \log \pi_\theta(a_t{*}\mid s_t) G_t \Big]
+$$
+
+**Policy Gradient Theorem form (using Q-function and state visitation):**
+
+$$
+\nabla\_\theta J(\theta) = \mathbb{E}*{s \sim d^\pi, a \sim \pi*\theta} \Big[ \nabla\_\theta \log \pi_\theta(a{*}\mid s) Q^\pi(s,a) \Big]
+$$
+
+* Both forms are equivalent  
+* REINFORCE is a **Monte Carlo estimator** of the theorem form
