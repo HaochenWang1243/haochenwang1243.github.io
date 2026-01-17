@@ -1,3 +1,39 @@
+# TX/RX mobility and Doppler effect in multi-path channel
+## Preliminary: Doppler shift in signal path
+
+When a transmitter (TX) and receiver (RX) are in relative motion, the received signal frequency shifts from the transmitted frequency — this is the **Doppler effect**.  
+In wireless communications, this shift depends on the **geometry of each propagation path** and **which parts of the channel are moving**.
+
+---
+
+### 1. Basic Doppler shift formula
+
+For a single path arriving at an angle $\theta$ relative to the direction of motion, the Doppler shift is:
+
+$$
+f\_d = \frac{v}{\lambda} \cos(\theta) = f\_m \cos(\theta)
+$$
+
+where:
+- $v$ = relative speed between the *wavefront source* and the observer along the path direction
+- $\lambda$ = carrier wavelength
+- $f\_m = v / \lambda$ = **maximum Doppler shift**
+- $\theta$ = angle between the velocity vector and the **direction of wave arrival/departure**
+
+---
+
+### 2. Determining $\theta$ for different mobility cases
+
+The key is identifying **whose motion matters** and **which segment of the path** determines the shift.
+
+| **Case**                     | **Doppler shift for a given NLOS path**                                                                                               | **Governing angle $\theta$**                                                                                                                              |
+|------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **RX moving, TX stationary** | Shift occurs at RX.                                                                                                                   $f\_d = \frac{v\_R}{\lambda} \cos(\theta\_R)$                                                                      | $\theta\_R$ = angle between **RX velocity vector** and **direction from last scatterer to RX** (arrival angle).                                           |
+| **TX moving, RX stationary** | Shift occurs at TX → carried through reflection.                                                                                      $f\_d = \frac{v\_T}{\lambda} \cos(\theta\_T)$                                                                      | $\theta\_T$ = angle between **TX velocity vector** and **direction from TX to first scatterer** (departure angle).                                        |
+| **Both TX and RX moving**    | Shift = sum of TX contribution + RX contribution.                                                                                     $f\_d = \frac{1}{\lambda} \big[ v\_T \cos(\theta\_T) + v\_R \cos(\theta\_R) \big]$                                | $\theta\_T$ = TX→first scatterer angle relative to TX motion.<br>$\theta\_R$ = last scatterer→RX angle relative to RX motion.                             |
+| **Moving scatterer(s)**      | Each moving segment adds its own term. For one moving scatterer: $f\_d = \frac{1}{\lambda} \big[ v\_S(\cos\alpha + \cos\beta) \big]$ | $\alpha$ = angle between scatterer velocity and scatterer→TX direction.<br>$\beta$ = angle between scatterer velocity and scatterer→RX direction.          |
+
+
 When we talk about the **Doppler spectrum** at a fixed delay, we’re implicitly grouping together **multiple multipath components that have approximately the same propagation delay**.
 
 Let’s unpack this carefully and see *why* this makes sense, physically and mathematically.
