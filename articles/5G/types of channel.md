@@ -221,11 +221,149 @@ So PDCCH schedules DL-SCH and UL-SCH.
 
 ---
 
-# Quick Check for You
+# Step 1 — Start From What You Already Know
 
-1. Which physical channel carries SIB1?
-2. Which physical channel carries MIB?
-3. Which physical channel carries RRCReconfiguration?
+You know:
+
+* DL-DCCH carries RRC messages
+* BCCH carries system info
+* DTCH carries user data
+
+Question:
+
+👉 Does the PHY layer care whether the bits are RRC, SIB, or user IP data?
+
+Or does it only care about things like:
+
+* Coding rate
+* HARQ
+* Scheduling
+* CRC
+* Retransmission
+
+Which one?
+
+---
+
+The PHY/MAC does **not care about the semantic meaning** of the bits.
+It only cares about **how to transmit them reliably**.
+
+That’s where transport channels come in.
+
+---
+
+# Step 2 — What “How” Means Technically
+
+Transport channels define:
+
+* Is HARQ used?
+* Is link adaptation used?
+* Is scheduling dynamic or fixed?
+* Is it broadcast or UE-specific?
+* Is retransmission allowed?
+* What CRC size?
+* What coding scheme?
+
+They define the **transmission mechanism**.
+
+They do *not* define whether the bits are:
+
+* SIB
+* Paging
+* RRC
+* TCP payload
+
+That classification happens at the **logical channel** layer.
+
+---
+
+# Concrete Example
+
+Take two different logical channels:
+
+* BCCH (SIB1)
+* DL-DCCH (RRCReconfiguration)
+
+Both are carried over:
+
+DL-SCH
+→ mapped to PDSCH
+
+Now ask yourself:
+
+👉 Does DL-SCH behave differently because it carries SIB1 vs RRCReconfiguration?
+
+No.
+
+DL-SCH:
+
+* Uses HARQ
+* Uses link adaptation
+* Is scheduled by DCI
+* Uses TB + CRC
+
+It doesn’t care what the bits represent.
+
+---
+
+# Now Compare With BCH
+
+BCH (transport channel) is different:
+
+* No HARQ
+* Fixed coding
+* Broadcast
+* Very robust
+* Always mapped to PBCH
+
+Why?
+
+Because its delivery mechanism is different.
+
+It’s designed for:
+
+* Initial access
+* No UE identity yet
+* Maximum coverage
+
+---
+
+# So the Hierarchy Is:
+
+### Logical channel → defines **what the bits are**
+
+* Control vs traffic
+* Broadcast vs dedicated
+
+### Transport channel → defines **how the bits are transmitted**
+
+* Scheduled?
+* Retransmitted?
+* Broadcast?
+* Coding robustness?
+* HARQ?
+
+### Physical channel → defines **where in the grid**
+
+* Which PRBs
+* Which symbols
+
+---
+
+# Let Me Test You
+
+Imagine we invent a brand new logical channel tomorrow:
+
+“EmergencyAlertChannel”
+
+If we map it to DL-SCH…
+
+👉 Would we need to redesign the PHY?
+
+Or would it just behave like any other DL-SCH transmission?
+
+Think about that carefully.
+
 4. Does PDCCH carry RRC messages?
 
 Answer those one by one.
